@@ -1,0 +1,83 @@
+extends ../layouts/admin
+
+
+block content
+	div.compare(
+		ng-controller="AdminCompareController"
+		flex
+		layout="column"
+		layout-wrap
+		layout-padding
+		)
+
+		section(layout="row", flex)
+
+			md-content(flex, layout-padding)
+				md-input-container.scrapes.md-block(
+					layout="column"
+					layout-align="center center"
+				)
+					label Snapshot #1
+					md-select(
+						ng-model="graphs[0].selectedScrape"
+						aria-label="Snapshot #1"
+					)
+						md-option(
+							ng-repeat="scrape in scrapes.all"
+							ng-value="scrape"
+						).
+							{{$first ? 'First Snapshot: ':''}}
+							{{$last ? 'Most Recent Snapshot: ':''}}
+							{{scrape.updatedAt | date:'dd/MM/yyyy HH:mm'}}
+							
+				//- Metrics
+				graph-metrics(graph-data="graphs[0].data")
+
+				//- Graph			
+				div.graph
+					nvd3(
+						options="d3options"
+						data="graphs[0].data"
+						api="graphs[0].api"
+					)
+
+				div.tags
+					tag-selector( 
+						available-tags="tags.all",
+						selected-tags="graphs[0].selectedTags"
+					)
+
+			md-content(flex, layout-padding)
+				md-input-container.scrapes.md-block(
+
+					layout="column"
+					layout-align="center center"
+				)
+					label Snapshot #2
+					md-select(
+						ng-model="graphs[1].selectedScrape"
+						aria-label="Snapshot #2"
+					)
+						md-option(
+							ng-repeat="scrape in scrapes.all"
+							ng-value="scrape"
+						).
+							{{$first ? 'First Snapshot: ':''}}
+							{{$last ? 'Most Recent Snapshot: ':''}}
+							{{scrape.updatedAt | date:'dd/MM/yyyy HH:mm'}}
+				//- Metrics
+				graph-metrics(graph-data="graphs[1].data")
+
+				//- Graph			
+				div.graph
+					nvd3(
+						options="d3options"
+						data="graphs[1].data"
+						api="graphs[1].api"
+					)
+
+				div.tags
+					tag-selector( 
+						available-tags="tags.all",
+						selected-tags="graphs[1].selectedTags"
+					)

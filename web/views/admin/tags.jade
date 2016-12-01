@@ -1,0 +1,79 @@
+extends ../layouts/admin
+
+
+block content
+	div(ng-controller="TagsController", layout="column")
+
+		section(layout="row", flex)
+
+			md-content(flex, layout-padding, layout="row")
+
+				md-list(flex)
+					md-list-item(
+						ng-repeat="tag in tags.all"
+						ng-click="showEditTagForm(tag)"
+						)
+						p {{tag.name}}
+					
+					//- Create New tag link
+					md-list-item(ng-click="showCreateTagForm()")
+						p Create new tag
+
+			//- Edit tag
+			md-sidenav.md-sidenav-right.md-whiteframe-4dp(
+				layout="column"
+				md-component-id="editTagForm"
+			)
+
+				md-toolbar.md-theme-light
+					h1.md-toolbar-tools Tag: {{tagDetail.name}}
+
+				md-content(layout-padding, flex)
+					
+					form(name="editTagForm", flex, layout="column")
+						md-input-container.md-block
+							label Tag name
+							input(
+								required
+								md-minlength="2"
+								ng-model='tagDetail.name'
+							)
+
+						md-button.md-primary.md-raised.md-block(
+							ng-click="update()"
+							ng-disabled="!editTagForm.$dirty || editTagForm.$invalid"
+							type="submit"
+						) Save Changes
+
+
+				md-content(flex=10)
+					div(flex)
+						md-button.md-raised.md-warn.md-block(
+							flex
+							ng-click="deleteTag()"
+						) Delete Tag
+
+			//- Create New tag
+			md-sidenav.md-sidenav-right.md-whiteframe-4dp(
+				md-component-id="createTagForm"
+				)
+
+				md-toolbar.md-theme-light
+					h1.md-toolbar-tools Create New Tag
+
+				md-content(layout-padding)
+					
+					form(flex, name="newTagForm", layout="column")
+						md-input-container.md-block
+							label Tag name
+							input(
+								required
+								md-minlength="2"
+								ng-model='newTagName'
+							)
+
+						md-button.md-primary.md-raised.md-block(
+							ng-click="createNewTag()"
+							ng-disabled="newTagForm.$invalid"
+							type="submit"
+						) Create tag

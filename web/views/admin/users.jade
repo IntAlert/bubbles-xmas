@@ -1,0 +1,104 @@
+extends ../layouts/admin
+
+
+block content
+	div(ng-controller="UsersController", layout="column")
+
+		section(layout="row", flex)
+
+			md-sidenav.md-sidenav-left(
+				md-component-id="left"
+				md-is-locked-open="true"
+				md-whiteframe="4"
+			)
+				md-toolbar.md-theme-indigo
+					h1.md-toolbar-tools Filter Users
+				md-content(layout-padding)
+
+					p Filter by name or tag
+					md-input-container.md-block
+						label By name
+						input(ng-model="query.displayName")
+
+					tag-selector( 
+							available-tags="tags.all",
+							selected-tags="query.selectedTags"
+						)
+					
+					//- p Group Membership
+					//- md-radio-group(ng-model="query.in_group")
+					//- 	md-radio-button(
+					//- 		ng-value="true"
+					//- 		aria-label="In group"
+					//- 		) In group
+					//- 	md-radio-button(
+					//- 		ng-value="false"
+					//- 		aria-label="Not in group"
+					//- 		) Not in group
+
+
+			md-content(flex, layout-padding)
+
+				md-list(flex)
+					md-list-item.md-3-line(
+						ng-repeat="user in users.all | filter:filterUser(user)" 
+						ng-click="showUserDetail(user)"
+					)
+						img.md-avatar(
+							alt="{{user.name}}"
+							ng-src="http://graph.facebook.com/{{user.fb_id}}/picture?type=square"
+							)
+						div.md-list-item-text(layout="column")
+							h3 {{ user.displayName }}
+							p
+								span(ng-repeat="tag in user.Tags") {{ tag.name }}{{ $last ? '':', '}}
+
+			md-sidenav.md-sidenav-right.md-whiteframe-4dp(
+				md-component-id="userDetail"
+				)
+
+				md-toolbar.md-theme-light
+					h1.md-toolbar-tools {{userDetail.displayName}}
+
+					
+
+					md-content(layout-padding)
+
+						div.profile_pic
+							img(
+								alt="{{user.name}}"
+								ng-src="http://graph.facebook.com/{{userDetail.fb_id}}/picture?type=large"
+							)
+
+						md-checkbox(
+							 aria-label="Disabled checkbox" 
+							 ng-model="userDetail.is_admin_approved"
+							 ng-change="updateAdminApproval()"
+						) Approved as Admin
+
+						//- pre {{userDetail | json}}
+
+
+						tag-selector( 
+							available-tags="tags.all",
+							selected-tags="userDetail.Tags"
+						)
+						
+						form(name="newTagForm", layout="column")
+							md-input-container.md-block
+								label Create a tag
+								input(
+									required
+									ng-model="newTagName"
+								)
+
+									
+							md-button.md-raised.md-primary.md-block(
+								ng-disabled="newTagForm.$invalid"
+								ng-click="createNewTag()"
+							) Create Tag
+
+
+
+
+
