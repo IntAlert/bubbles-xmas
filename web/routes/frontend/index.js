@@ -10,11 +10,5 @@ router.get('/', function(req, res, next) {
 	res.render('frontend/auth/login');
 });
 
-router.get('/hello', function(req, res, next) {
-	res.json({'Hello':'world'});
-});
-
-
-
 
 module.exports = router;
